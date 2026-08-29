@@ -1,0 +1,18 @@
+# Build artifacts
+backend/target/
+
+# Local machine metadata
+.DS_Store
+**/.DS_Store
+.vscode/
+
+# Local tooling history and logs
+.github/modernize/
+backend/.github/modernize/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key

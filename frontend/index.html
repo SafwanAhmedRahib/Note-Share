@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoteShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="offlineBanner" class="offline-banner hidden">Can't reach the server — check that the backend is running and you're on the same Wi-Fi.</div>
+  <main class="shell">
+    <section id="authView" class="auth-layout">
+      <div class="brand-panel">
+        <div class="mark">N</div>
+        <p class="eyebrow">LOCAL NOTE NETWORK</p>
+        <h1>Keep the good<br><em>thoughts</em> close.</h1>
+        <p class="lede">A quiet place for notes that need to move between people, not platforms.</p>
+        <div class="signal-panel">
+          <p class="signal-label">SIGNAL</p>
+          <p class="signal-row"><span class="signal-dot"></span>Works over your Wi-Fi only</p>
+          <p class="signal-row signal-sub">No cloud account, no internet needed</p>
+        </div>
+      </div>
+      <div class="auth-card">
+        <div class="tabs"><button class="tab active" data-mode="login">Sign in</button><button class="tab" data-mode="register">Create account</button></div>
+        <form id="authForm">
+          <h2 id="authTitle">Welcome back</h2><p id="authHint">Your notes are waiting.</p>
+          <label>Username<input id="username" required autocomplete="username" placeholder="e.g. maya"></label>
+          <label>Password<input id="password" required type="password" autocomplete="current-password" placeholder="At least 6 characters"></label>
+          <button class="primary" type="submit"><span id="authAction">Open my notes</span><span>↗</span></button>
+          <p id="authMessage" class="message" role="alert"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="appView" class="app-view hidden">
+      <header class="topbar"><a class="wordmark" href="#">Note<span>Share</span></a><div class="top-actions"><span id="userLabel" class="user-label"></span><label class="visibility-toggle" title="When on, only your friends can see your notes in their feed — even ones marked Public."><input type="checkbox" id="accountPrivateToggle"><span>Private account</span></label><button id="logoutButton" class="quiet-button">Sign out</button><button id="deleteAccountButton" class="danger-link">Delete account</button></div></header>
+      <nav class="layer-nav">
+        <button class="layer-tab active" data-target-layer="notes">Notes</button>
+        <button class="layer-tab" data-target-layer="feed">Feed</button>
+        <button class="layer-tab" data-target-layer="friends">Friends <span id="friendRequestBadge" class="badge hidden">0</span></button>
+      </nav>
+
+      <section id="notesLayer" class="layer">
+        <div class="workspace-head"><div><p class="eyebrow">YOUR WORKSPACE</p><h1>Notes worth sharing.</h1></div><button id="newNoteButton" class="primary compact">+ New note</button></div>
+        <div class="workspace-controls">
+          <input id="searchInput" type="search" placeholder="Search notes…" aria-label="Search notes">
+          <select id="sortSelect" aria-label="Sort notes">
+            <option value="updated">Recently updated</option>
+            <option value="title">Title (A–Z)</option>
+          </select>
+        </div>
+        <div class="workspace-grid">
+          <aside class="sidebar"><div class="sidebar-title">Your space <span id="noteCount">0</span></div><button class="filter active" data-filter="all">All notes</button><button class="filter" data-filter="mine">My notes</button><button class="filter" data-filter="shared">Shared with me</button></aside>
+          <section class="notes-area"><div id="emptyState" class="empty-state"><span class="empty-icon">✦</span><h2>Start with one thought</h2><p>Create a note, then share it with a friend on your network.</p></div><div id="notesList" class="notes-list"></div></section>
+        </div>
+      </section>
+
+      <section id="feedLayer" class="layer hidden">
+        <div class="workspace-head"><div><p class="eyebrow">THE FEED</p><h1>What's going around.</h1></div></div>
+        <p class="col-hint">Your notes, your friends' notes (public or private), and public notes from everyone else on the network.</p>
+        <div id="feedEmpty" class="empty-state hidden"><span class="empty-icon">✦</span><h2>Quiet for now</h2><p>Add friends, or check back once someone posts something public.</p></div>
+        <div id="feedList" class="notes-list"></div>
+      </section>
+
+      <section id="friendsLayer" class="layer hidden">
+        <div class="workspace-head"><div><p class="eyebrow">CONNECTIONS</p><h1>People you trust.</h1></div></div>
+        <div class="friends-grid">
+          <div class="friends-col">
+            <h3 class="col-title">Requests</h3>
+            <p id="requestsEmpty" class="people-empty">No pending requests</p>
+            <ul id="incomingRequests" class="people-list requests-list"></ul>
+            <ul id="outgoingRequests" class="people-list requests-list"></ul>
+            <h3 class="col-title">Your friends <span id="friendCount">0</span></h3>
+            <ul id="friendsListEl" class="people-list"></ul>
+          </div>
+          <div class="friends-col">
+            <h3 class="col-title">Everyone on this network</h3>
+            <p class="col-hint">Add someone as a friend to start sharing notes with them.</p>
+            <ul id="networkPeopleList" class="people-list"><li>Loading...</li></ul>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <dialog id="noteDialog"><form id="noteForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow">NOTE EDITOR</p><h2 id="dialogTitle">New note</h2></div><button type="button" class="close-button" id="closeDialog">×</button></div><input type="hidden" id="noteId"><label>Title<input id="noteTitle" required maxlength="120" placeholder="A clear title"></label><label>Content<textarea id="noteContent" required rows="8" placeholder="Write something worth remembering..."></textarea></label><label class="checkbox-row"><input type="checkbox" id="noteIsPublic"><span>Make this public — visible to everyone on the network, not just friends</span></label><p id="noteMessage" class="message" role="alert"></p><div class="dialog-actions"><button type="button" class="quiet-button" id="cancelDialog">Cancel</button><button class="primary compact" type="submit">Save note <span>↗</span></button></div></form></dialog>
+  <dialog id="deleteAccountDialog"><form id="deleteAccountForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow danger">IRREVERSIBLE</p><h2>Delete your account</h2></div><button type="button" class="close-button" id="closeDeleteDialog">×</button></div><p class="dialog-copy">This permanently deletes your notes, removes your shares with others, and signs you out everywhere. This can't be undone.</p><label>Confirm your password<input id="deletePassword" required type="password" autocomplete="current-password" placeholder="Your current password"></label><p id="deleteMessage" class="message" role="alert"></p><div class="dialog-actions"><button type="button" class="quiet-button" id="cancelDeleteDialog">Cancel</button><button class="danger compact" type="submit">Delete my account</button></div></form></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

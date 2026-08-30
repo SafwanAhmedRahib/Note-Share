@@ -159,7 +159,23 @@ textarea{resize:vertical;min-height:120px}
   .brand-panel{text-align:left}
   .workspace-grid{grid-template-columns:1fr}
   .sidebar{display:flex;flex-direction:column}
-  .people-list{flex-direction:row;flex-wrap:wrap}
+  .friends-grid{grid-template-columns:1fr;gap:8px}
+}
+
+@media (max-width:640px){
+  .app-view{padding:24px 5vw 60px}
+  .topbar{flex-wrap:wrap;gap:10px 16px;padding-bottom:20px}
+  .top-actions{flex-wrap:wrap;gap:10px 16px;width:100%}
+  .layer-nav{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .layer-tab{white-space:nowrap}
+  .workspace-head{flex-direction:column;align-items:flex-start;gap:14px}
+  .primary.compact{width:100%;justify-content:center}
+  .notes-list{grid-template-columns:1fr}
+  .people-list li{flex-wrap:wrap}
+  .person-action{margin-left:auto}
+  dialog{padding:24px;width:92vw}
+  .dialog-actions{flex-direction:column-reverse;gap:10px}
+  .dialog-actions button{width:100%;justify-content:center}
 }
 
 /* ---------- Layer navigation (Notes / Friends) ---------- */
